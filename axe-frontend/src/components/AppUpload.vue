@@ -56,14 +56,27 @@ export default {
   methods: {
     upload($event) {
       this.is_dragover = false
-      const { files } = [...$event.dataTransfer.files]
-      files.array.forEach((file) => {
-        if (file.type != 'image/jpeg') {
-          return
+      const file = [...$event.dataTransfer.files][0]
+      // files.forEach((file) => {
+      //   if (file.type != 'image/jpeg') {
+      //     return
+      //   }
+      //   // NEXT TASK: CALL YOUR BACKEND AND UPLOAD AN IMAGE TO S3.
+      const formData = new FormData()
+      formData.append('file', file)
+      fetch('http://localhost:8080/upload', {
+        method: 'POST',
+        body: formData
+      }).then((response) => {
+        if (response.ok) {
+          console.log('Image uploaded.')
+        } else {
+          console.log('Something went wrong! :(')
         }
-        // NEXT TASK: CALL YOUR BACKEND AND UPLOAD AN IMAGE TO S3.
       })
-      console.log(files)
+      // })
+      console.log('before the files log.')
+      console.log(file)
     }
   }
 }
